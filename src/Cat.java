@@ -1,5 +1,10 @@
 public class Cat
 {
+	private static String STATUS_DEAD 		= "Dead";
+	private static String STATUS_EXPLODED 	= "Exploded";
+	private static String STATUS_SLEEPING 	= "Sleeping";
+	private static String STATUS_PLAYING 	= "Playing";
+
 	private Double originWeight;
 	private Double weight;
 
@@ -15,16 +20,7 @@ public class Cat
 
 	public Cat()
 	{
-		weight = Math.floor(1500.0 + 3000.0 * Math.random());
-		originWeight = weight;
-		minWeight = 100.0;
-		maxWeight = 9000.0;
-
-		//Созданные коты еще не ели и не пили
-		lastFoodWeight  = 0.0;
-		lastDrinkWeight = 0.0;
-		currentStatus   = getStatus(); //сразу присваиваем статус
-		count++;
+		this(Math.floor(1500.0 + 3000.0 * Math.random()));
 	}
 
 	public Cat(Double weight)
@@ -37,24 +33,25 @@ public class Cat
 		//Созданные коты еще не ели и не пили
 		lastFoodWeight  = 0.0;
 		lastDrinkWeight = 0.0;
-		currentStatus   = getStatus(); //сразу присваиваем статус
+		setStatus();		//сразу присваиваем статус
 		count++;
 
 	}
 
-	public void createTwin(Cat cat)
+	public Cat createTwin()
 	{
-		weight 			= cat.weight;
+		return this;
+	/*	weight 			= cat.weight;
 		originWeight 	= cat.originWeight;
 		minWeight 		= cat.minWeight;
 		maxWeight		= cat.maxWeight;
 		lastDrinkWeight	= cat.lastDrinkWeight;
 		lastFoodWeight	= cat.lastFoodWeight;
-		currentStatus	= cat.currentStatus;
+		currentStatus	= cat.currentStatus;*/
 	}
 
 	/**
-	 * везде поставил дополнительно getStatus, а то кот может помереть,
+	 * везде поставил дополнительно setStatus, а то кот может помереть,
 	 * а статус и количество котов не изменится
 	 */
 	public void meow()
@@ -62,7 +59,7 @@ public class Cat
 		//weight = weight - 1;
 		weight = weight - 100; //изменил, а то они долго мяукуют
 		System.out.println("Meow");
-		getStatus();
+		setStatus();
 	}
 
 	public void feed(Double amount)
@@ -70,7 +67,7 @@ public class Cat
 		amount = Math.floor(amount);
 		weight = weight + amount;
 		lastFoodWeight = amount;
-		getStatus();
+		setStatus();
 	}
 
 	public void drink(Double amount)
@@ -78,7 +75,7 @@ public class Cat
 		amount = Math.floor(amount);
 		weight = weight + amount;
 		lastDrinkWeight = amount;
-		getStatus();
+		setStatus();
 	}
 
 	public void goToToilet()
@@ -86,12 +83,34 @@ public class Cat
 		Double sheet = Math.floor(50 + 150 * Math.random());
 		weight = weight - sheet;
 		System.out.println(" going to toilet. Sheet weight " + sheet);
-		getStatus();
+		setStatus();
 	}
 	public void kill()
 	{
 		weight = minWeight - 1;
-		getStatus();
+		setStatus();
+	}
+
+	private void setStatus()
+	{
+		if(weight < minWeight) {
+			//если кот уже был мертв, количество не уменьшается
+			if (!currentStatus.equals(STATUS_DEAD))
+				count--;
+			currentStatus = STATUS_DEAD;
+		}
+		else if(weight > maxWeight) {
+			//если кот уже взорвался, то количество не уменьшается
+			if (!currentStatus.equals(STATUS_EXPLODED))
+				count--;
+			currentStatus = STATUS_EXPLODED;
+		}
+		else if(weight > originWeight) {
+			currentStatus = STATUS_SLEEPING;
+		}
+		else {
+			currentStatus = STATUS_PLAYING;
+		}
 	}
 
 	public Double getWeight()
@@ -101,7 +120,8 @@ public class Cat
 
 	public String getStatus()
 	{
-		if(weight < minWeight) {
+		return currentStatus;
+/*		if(weight < minWeight) {
 			//если кот уже был мертв, количество не уменьшается
 			if (!currentStatus.equals("Dead"))
 				count--;
@@ -122,14 +142,14 @@ public class Cat
 		else {
 			currentStatus = "Playing";
 			return "Playing";
-		}
+		}*/
 	}
 
 	public Double getLastFoodWeight()
 	{
 		return lastFoodWeight;
 	}
-	public  Double getLastDrinkWeight()
+	public Double getLastDrinkWeight()
 	{
 		return lastDrinkWeight;
 	}

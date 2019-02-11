@@ -4,6 +4,7 @@ public class Loader
 {
 	private static void lesson2()
 	{
+
 		/**
 		 * УРОК 2 Понятие класса и объекта
 		 * Создать 5­-7 кошек и повызывать у них различные методы:
@@ -28,8 +29,7 @@ public class Loader
 		for (Integer i = 0; i < catsCount; i++)
 		{
 			cats[i].drink(40 + Math.random() * 1000 );
-			System.out.println("Кот № " + (i + 1) + " имеет вес: " + cats[i].getWeight() + " гр.");
-			System.out.println("Кот № " + (i + 1) + " " + cats[i].getStatus());
+			printCatWeightAndStatus(i, cats[i]);
 		}
 		/**
 		 * Кормим котов до тех пор, пока кто-нибудь не взорвертся
@@ -45,8 +45,7 @@ public class Loader
 			for (Integer i = 0; i < catsCount; i++)
 			{
 				cats[i].feed(40 + Math.random() * 1000);
-				System.out.println("Кот № " + (i + 1) + " имеет вес: " + cats[i].getWeight() + " гр.");
-				System.out.println("Кот № " + (i + 1) + " " + cats[i].getStatus());
+				printCatWeightAndStatus(i, cats[i]);
 				if (cats[i].getStatus().equals("Exploded"))
 				{
 					System.out.println("АХТУНГ! Кот № " + (i + 1) + " взорвался!");
@@ -75,8 +74,7 @@ public class Loader
 					System.out.print("Кот № " + (i + 1) + " ");
 					cats[i].meow();
 				}
-				System.out.println("Кот № " + (i + 1) + " имеет вес: " + cats[i].getWeight() + " гр.");
-				System.out.println("Кот № " + (i + 1) + " " + cats[i].getStatus());
+				printCatWeightAndStatus(i, cats[i]);
 			}
 
 			//Подсчет оставшихся в живых котов
@@ -88,9 +86,16 @@ public class Loader
 			}
 			System.out.println("Мертвых или взорвавшихся котов: " + catsExplodedOrDeadCount);
 
-		} while (catsExplodedOrDeadCount != catsCount );
+		} while ((int)catsExplodedOrDeadCount != (int)catsCount);
 		System.out.println("Все коты мертвы");
 	}
+
+	private static void printCatWeightAndStatus(Integer i, Cat cat)
+	{
+		System.out.println("Кот № " + (i + 1) + " имеет вес: " + cat.getWeight() + " гр.");
+		System.out.println("Кот № " + (i + 1) + " " + cat.getStatus());
+	}
+
 	private static void lesson3()
 	{
 		/**
@@ -218,31 +223,21 @@ public class Loader
 		 *
 		 * - Создать у кошки метод создания её “глубокой” копии.
 		 */
-		System.out.println("LESSON 5");
+		System.out.println("LESSON 6");
 		System.out.println("Create Shiro");
 		Cat shiro = new Cat();
 		System.out.println("Shiro weight "	+ shiro.getWeight());
-		System.out.println("Create kitten Kuro");
-		Cat kuro = getKitten();
-		System.out.println("Kuro weight "	+ kuro.getWeight());
 
-		System.out.println("Cats eating and drinking...");
+		System.out.println("Shiro eating and drinking...");
 		shiro.feed(  50.0);
 		shiro.drink(10.0);
-
-		kuro.feed(11.0);
-		kuro.drink(5.0);
 
 		System.out.println("Shiro weight "	+ shiro.getWeight());
 		System.out.println("Shiro last feed " + shiro.getLastFoodWeight() +
 				" last drink " + shiro.getLastDrinkWeight() );
 
-		System.out.println("Kuro weight "  	+ kuro.getWeight());
-		System.out.println("Kuro last feed " + kuro.getLastFoodWeight() +
-				" kuro drink " + kuro.getLastDrinkWeight() );
-
-		System.out.println("Делаем из kuro близнеца shiro");
-		kuro.createTwin(shiro);
+		System.out.println("Создаем  kuro как близнеца shiro");
+		Cat kuro = shiro.createTwin();
 
 		System.out.println("Shiro weight "	+ shiro.getWeight());
 		System.out.println("Shiro last feed " + shiro.getLastFoodWeight() +
