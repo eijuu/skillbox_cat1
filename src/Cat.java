@@ -1,9 +1,14 @@
 public class Cat
 {
-	private static String STATUS_DEAD 		= "Dead";
+/*	private static String STATUS_DEAD 		= "Dead";
 	private static String STATUS_EXPLODED 	= "Exploded";
 	private static String STATUS_SLEEPING 	= "Sleeping";
-	private static String STATUS_PLAYING 	= "Playing";
+	private static String STATUS_PLAYING 	= "Playing";*/
+
+	enum Status
+	{
+		DEAD, EXPLODED, SLEEPING, PLAYING
+	}
 
 	private Double originWeight;
 	private Double weight;
@@ -14,7 +19,7 @@ public class Cat
 	private Double lastFoodWeight;
 	private Double lastDrinkWeight;
 
-	private String currentStatus;
+	private Status currentStatus;
 
 	private static Integer count = 0;
 
@@ -40,14 +45,12 @@ public class Cat
 
 	public Cat createTwin()
 	{
-		return this;
-	/*	weight 			= cat.weight;
-		originWeight 	= cat.originWeight;
-		minWeight 		= cat.minWeight;
-		maxWeight		= cat.maxWeight;
-		lastDrinkWeight	= cat.lastDrinkWeight;
-		lastFoodWeight	= cat.lastFoodWeight;
-		currentStatus	= cat.currentStatus;*/
+		Cat catTwin = new Cat(this.weight);
+		catTwin.lastDrinkWeight = this.lastDrinkWeight;
+		catTwin.lastFoodWeight  = this.lastFoodWeight;
+
+		return catTwin;
+
 	}
 
 	/**
@@ -95,21 +98,23 @@ public class Cat
 	{
 		if(weight < minWeight) {
 			//если кот уже был мертв, количество не уменьшается
-			if (!currentStatus.equals(STATUS_DEAD))
+			//if (!currentStatus.equals(STATUS_DEAD))
+			if(currentStatus != Status.DEAD && currentStatus != Status.EXPLODED)
 				count--;
-			currentStatus = STATUS_DEAD;
+			currentStatus = Status.DEAD;
 		}
 		else if(weight > maxWeight) {
 			//если кот уже взорвался, то количество не уменьшается
-			if (!currentStatus.equals(STATUS_EXPLODED))
+			//if (!currentStatus.equals(STATUS_EXPLODED))
+			if(currentStatus != Status.EXPLODED && currentStatus != Status.DEAD)
 				count--;
-			currentStatus = STATUS_EXPLODED;
+			currentStatus = Status.EXPLODED;
 		}
 		else if(weight > originWeight) {
-			currentStatus = STATUS_SLEEPING;
+			currentStatus = Status.SLEEPING;
 		}
 		else {
-			currentStatus = STATUS_PLAYING;
+			currentStatus = Status.PLAYING;
 		}
 	}
 
@@ -118,7 +123,7 @@ public class Cat
 		return weight;
 	}
 
-	public String getStatus()
+	public Status getStatus()
 	{
 		return currentStatus;
 /*		if(weight < minWeight) {

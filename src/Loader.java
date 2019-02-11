@@ -46,7 +46,8 @@ public class Loader
 			{
 				cats[i].feed(40 + Math.random() * 1000);
 				printCatWeightAndStatus(i, cats[i]);
-				if (cats[i].getStatus().equals("Exploded"))
+				//if (cats[i].getStatus().equals("Exploded"))
+				if (cats[i].getStatus() == Cat.Status.EXPLODED)
 				{
 					System.out.println("АХТУНГ! Кот № " + (i + 1) + " взорвался!");
 					isExploded = true;
@@ -69,7 +70,8 @@ public class Loader
 			System.out.println("Мяуканье котов № " + ++meowCount);
 			for (Integer i = 0; i < catsCount; i++)
 			{
-				if (cats[i].getStatus().equals("Sleeping") || cats[i].getStatus().equals("Playing"))
+				//if (cats[i].getStatus().equals("Sleeping") || cats[i].getStatus().equals("Playing"))
+				if (cats[i].getStatus() == Cat.Status.SLEEPING || cats[i].getStatus() == Cat.Status.PLAYING)
 				{
 					System.out.print("Кот № " + (i + 1) + " ");
 					cats[i].meow();
@@ -81,7 +83,8 @@ public class Loader
 			catsExplodedOrDeadCount = 0;
 			for (Integer i = 0; i < catsCount; i++)
 			{
-				if (cats[i].getStatus().equals("Exploded") || cats[i].getStatus().equals("Dead"))
+				//if (cats[i].getStatus().equals("Exploded") || cats[i].getStatus().equals("Dead"))
+				if (cats[i].getStatus() == Cat.Status.EXPLODED || cats[i].getStatus() == Cat.Status.DEAD)
 					catsExplodedOrDeadCount++;
 			}
 			System.out.println("Мертвых или взорвавшихся котов: " + catsExplodedOrDeadCount);
@@ -226,26 +229,33 @@ public class Loader
 		System.out.println("LESSON 6");
 		System.out.println("Create Shiro");
 		Cat shiro = new Cat();
-		System.out.println("Shiro weight "	+ shiro.getWeight());
+		printCatWeightAndLastFoodDrinkWeight(shiro, "Shiro");
 
 		System.out.println("Shiro eating and drinking...");
 		shiro.feed(  50.0);
 		shiro.drink(10.0);
 
-		System.out.println("Shiro weight "	+ shiro.getWeight());
-		System.out.println("Shiro last feed " + shiro.getLastFoodWeight() +
-				" last drink " + shiro.getLastDrinkWeight() );
+		printCatWeightAndLastFoodDrinkWeight(shiro, "Shiro");
 
 		System.out.println("Создаем  kuro как близнеца shiro");
 		Cat kuro = shiro.createTwin();
+		printCatWeightAndLastFoodDrinkWeight(kuro, "Kuro");
 
-		System.out.println("Shiro weight "	+ shiro.getWeight());
-		System.out.println("Shiro last feed " + shiro.getLastFoodWeight() +
-				" last drink " + shiro.getLastDrinkWeight() );
+		System.out.println("Shiro eating and drinking...");
+		shiro.feed(  100.0);
+		shiro.drink(20.0);
 
-		System.out.println("Kuro weight "  	+ kuro.getWeight());
-		System.out.println("Kuro last feed " + kuro.getLastFoodWeight() +
-				" kuro drink " + kuro.getLastDrinkWeight() );
+		printCatWeightAndLastFoodDrinkWeight(shiro, "Shiro");
+		printCatWeightAndLastFoodDrinkWeight(kuro, "Kuro");
+
+	}
+	private static void printCatWeightAndLastFoodDrinkWeight(Cat cat, String catName)
+	{
+		System.out.println("=========");
+		System.out.println(catName +" weight "  	+ cat.getWeight());
+		System.out.println(catName + " last feed " + cat.getLastFoodWeight() +
+				" last drink " + cat.getLastDrinkWeight() );
+		System.out.println("=========");
 	}
 
 	public static void main(String[] args)
@@ -258,6 +268,7 @@ public class Loader
 			System.out.println("Введите число. Доступные команды:");
 			System.out.println("0 - узнать количество котов");
 			System.out.println("10 - выйти из программы");
+			System.out.println("7 - проверка маленькой ошибки");
 			System.out.println("Или введите номер урока [2-6]");
 			System.out.println("Ваша команда?");
 			commandNum = in.nextInt();
@@ -283,11 +294,25 @@ public class Loader
 				case 6:
 					lesson6();
 					break;
+				case 7:
+					smallErrorCheck();
+					break;
 				case 10:
 					System.out.println("Выход из программы...");
 					break;
 			}
 		} while (commandNum != 10);
+	}
+
+	private static void smallErrorCheck()
+	{
+		Cat cat = new Cat();
+		// заморили голодом
+		cat.kill();
+		// а потом перекормили
+		cat.feed(1000000.0);
+		// чему будет равен? Должен быть 0
+		System.out.println(Cat.getCount());
 	}
 
 	private static Cat getKitten()
